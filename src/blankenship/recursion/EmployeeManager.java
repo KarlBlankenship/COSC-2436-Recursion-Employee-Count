@@ -22,6 +22,10 @@ import java.util.*;
  */
 public class EmployeeManager {
 
+    // Create an employee list variable.
+    public static List<Employee> employees;
+    public static int count = 0;
+    
     /**
      * The main method for program execution.
      * @param args
@@ -32,8 +36,7 @@ public class EmployeeManager {
         // Create an EmployeePortfolios object.
         EmployeeManager em = new EmployeeManager();
     
-        // Create an employee list variable.
-        List<Employee> employees;
+        
         
         /*
             employeeData.txt is stored in main project file so that it can
@@ -42,6 +45,7 @@ public class EmployeeManager {
         // Load employee data.
         employees = em.loadEmployeePortfolios("employee.txt");
         em.display(employees);
+        System.out.println(em.countEmployeesUnder("Veronica"));
         // Display unsorted employee instances
         //System.out.println("Unsorted list of employees.");
         //ef.display(employees);
@@ -114,7 +118,15 @@ public class EmployeeManager {
         }
     }
     
-    
+    private int countEmployeesUnder(String employeeName) {
+       
+        
+        for (int index = 0; index < employees.size(); index++) {
+            if (employees.get(index).getManager().equals(employeeName))
+                count = 1 + countEmployeesUnder(employees.get(index).getName());  
+        }
+        return count;
+    }
     
     
     /**
