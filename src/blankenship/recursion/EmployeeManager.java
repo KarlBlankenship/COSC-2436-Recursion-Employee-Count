@@ -1,10 +1,12 @@
 /*
  * COSC 2436 Programming Fundamentals III with Java
- * Java Recap Assignment 1
+ * Java Recursion Assignment to count employees.
  * Create an Employee Class containing employee name and manager name.
- * Create an EmployeePortfolios class to read a file containing a list of
- * employee names and their managers name. Then write to methods to sort the
- * employee objects by name and by manager name and display the results.
+ * Create an EmployeeManager class to read a file containing a list of
+ * employee names and their managers name. Then write a method called
+ * countEmployeesUnder(employeeName) to count the number of employees
+ * report either directly or indirectly to employeeName. Display the 
+ * results.
  */
 
 package blankenship.recursion;
@@ -13,23 +15,22 @@ import java.io.*;
 import java.util.*;
         
 /**
- * EmployeePortfolios Class containing the main class for executing this 
- * program. Also contains the NameComparator and Manager Comparator classes
- * as well and the methods for sorting by name, sorting by manager and
- * displaying the results.
+ * EmployeeManager Class contains the main method for executing this 
+ * program. it Also contains the a countEmployeesUnder and display
+ * methods.
  * @author Karl Blankenship
  */
 public class EmployeeManager {
 
     /**
-     * Main method for program execution.
+     * The main method for program execution.
      * @param args
      * @throws IOException 
      */
     public static void main(String[] args) throws IOException {
         
         // Create an EmployeePortfolios object.
-        EmployeeManager ef = new EmployeeManager();
+        EmployeeManager em = new EmployeeManager();
     
         // Create an employee list variable.
         List<Employee> employees;
@@ -39,8 +40,8 @@ public class EmployeeManager {
             be accessed without a specific file path for simplicity.
         */
         // Load employee data.
-        employees = ef.loadEmployeePortfolios("employeeData.txt");
-        
+        employees = em.loadEmployeePortfolios("employee.txt");
+        em.display(employees);
         // Display unsorted employee instances
         //System.out.println("Unsorted list of employees.");
         //ef.display(employees);
@@ -59,7 +60,7 @@ public class EmployeeManager {
      * employee instances, write text data to instance fields and add
      * instances to the output list.
      * @param filename
-     * @return employeeList
+     * @return employeeList A list of employee objects.
      * @throws FileNotFoundException
      * @throws IOException 
      */
@@ -77,26 +78,21 @@ public class EmployeeManager {
         
         // Create String var to hold each buffered line and burn file header.
         String line = br.readLine();    // Reads in file header.
-        System.out.println("Header: " + line);
         line = br.readLine(); // Read first line of data after header.
-        System.out.println("First line: " + line);
         
         // Write all buffered lines into Employee Instances and write to List.
         while (line != null) {
             // Create an instance of Employee.
-            Employee em = new Employee();
+            Employee emp = new Employee();
             // Split out name and manager from line.
             String[] lineEM = line.split(",",-1); 
             // Set instance fields.
-            System.out.println("lineEM[0]: " +lineEM[0]);
-            System.out.println("lineEM[1]: " +lineEM[1]);
-            //em.setName(lineEM[0]);
-            //em.setManager(lineEM[1]);
+            emp.setName(lineEM[0]);
+            emp.setManager(lineEM[1]);
             // Add the employee instance to the List.
-            employeeList.add(em);
+            employeeList.add(emp);
             // Read next line of file.
             line = br.readLine();
-            System.out.println("next line: " + line);
         }
         
         return employeeList; // Return employee list.
@@ -117,6 +113,9 @@ public class EmployeeManager {
                     employee.getManager());
         }
     }
+    
+    
+    
     
     /**
      * sortByEmployeeName Method will accept a List of Employee objects and 
