@@ -7,4 +7,4 @@ Nathan,Veronica
 Sally,Veronica
 Sam,Joseph
 Susan,Bob
-Veronica,Karl
+Veronica,

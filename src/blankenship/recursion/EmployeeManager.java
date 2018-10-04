@@ -86,7 +86,7 @@ public class EmployeeManager {
             // Create an instance of Employee.
             Employee em = new Employee();
             // Split out name and manager from line.
-            String[] lineEM = line.split(","); 
+            String[] lineEM = line.split(",",-1); 
             // Set instance fields.
             System.out.println("lineEM[0]: " +lineEM[0]);
             System.out.println("lineEM[1]: " +lineEM[1]);
