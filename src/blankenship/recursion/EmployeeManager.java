@@ -24,7 +24,10 @@ public class EmployeeManager {
 
     // Create an employee list variable.
     public static List<Employee> employees;
+    public static String name = "Veronica";
     public static int count = 0;
+    
+    public static int counter = 0;
     
     /**
      * The main method for program execution.
@@ -45,7 +48,10 @@ public class EmployeeManager {
         // Load employee data.
         employees = em.loadEmployeePortfolios("employee.txt");
         em.display(employees);
-        System.out.println(em.countEmployeesUnder("Veronica"));
+        count = em.countEmployeesUnder(name);
+        System.out.println(name + " manages " + count + " employees.");
+        System.out.println("counter: " + counter);
+        
         // Display unsorted employee instances
         //System.out.println("Unsorted list of employees.");
         //ef.display(employees);
@@ -122,12 +128,12 @@ public class EmployeeManager {
        
         
         for (int index = 0; index < employees.size(); index++) {
+            counter++;
             if (employees.get(index).getManager().equals(employeeName))
                 count = 1 + countEmployeesUnder(employees.get(index).getName());  
         }
         return count;
     }
-    
     
     /**
      * sortByEmployeeName Method will accept a List of Employee objects and 
