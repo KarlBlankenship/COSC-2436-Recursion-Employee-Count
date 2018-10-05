@@ -24,10 +24,10 @@ public class EmployeeManager {
 
     // Create an employee list variable.
     public static List<Employee> employees;
-    public static String name = "Veronica";
-    public static int count = 0;
     
-    public static int counter = 0;
+    // This is the count variable for counting the number of reports.
+    public static int count;
+    
     
     /**
      * The main method for program execution.
@@ -39,31 +39,29 @@ public class EmployeeManager {
         // Create an EmployeePortfolios object.
         EmployeeManager em = new EmployeeManager();
     
-        
-        
-        /*
-            employeeData.txt is stored in main project file so that it can
+        /*************************************************************
+            employee.txt is stored in main project file so that it can
             be accessed without a specific file path for simplicity.
-        */
-        // Load employee data.
+        *************************************************************/
+        // Load employee data from text file.
         employees = em.loadEmployeePortfolios("employee.txt");
+        
+        // Display the list of Employee Instances.
         em.display(employees);
-        count = em.countEmployeesUnder(name);
-        System.out.println(name + " manages " + count + " employees.");
-        System.out.println("counter: " + counter);
         
-        // Display unsorted employee instances
-        //System.out.println("Unsorted list of employees.");
-        //ef.display(employees);
+        // Add a line of separation between file contents and employee counts.
+        System.out.println("\nDirect and Indirect Reports:"); 
         
-        // Display list of employees sorted by name.
-        //System.out.println("List of employees sorted by name.");
-        //ef.display(ef.sortByEmployeeName(employees));
-        
-        // Display list of employees sorted by manager.
-        //System.out.println("List of employees sorted by manager.");
-        //ef.display(ef.sortByManagerName(employees));
+        // Count and display the number of direct and indirect
+        // reports for each employee.
+        for (Employee name : employees) {
+            count = 0; // Recursive exit condition if no reports are found.
+            count = em.countEmployeesUnder(name.getName());
+            System.out.println(name.getName() + " manages " + 
+                                count + " employee(s).");
+        }
     }
+    
     
     /**
      * loadEmployeePortfolios Method will read the text file, create 
@@ -87,26 +85,33 @@ public class EmployeeManager {
         BufferedReader br = new BufferedReader(fr);
         
         // Create String var to hold each buffered line and burn file header.
-        String line = br.readLine();    // Reads in file header.
+        String line = br.readLine(); // Reads in file header which isn't used.
         line = br.readLine(); // Read first line of data after header.
         
         // Write all buffered lines into Employee Instances and write to List.
         while (line != null) {
+            
             // Create an instance of Employee.
             Employee emp = new Employee();
+            
             // Split out name and manager from line.
+            // -1 is needed since the Veronica line has no second name
+            // after the comma in the text file.
             String[] lineEM = line.split(",",-1); 
-            // Set instance fields.
+            
+            // Set instance fields using array created above.
             emp.setName(lineEM[0]);
             emp.setManager(lineEM[1]);
+            
             // Add the employee instance to the List.
             employeeList.add(emp);
+            
             // Read next line of file.
-            line = br.readLine();
+            line = br.readLine();    
         }
-        
         return employeeList; // Return employee list.
     }
+    
     
     /**
      * display Method will accept a list of employees and display the list to
@@ -124,66 +129,19 @@ public class EmployeeManager {
         }
     }
     
+    
+    /**
+     * The countEmployeesUnder method will use recursion to count the number
+     * of direct and indirect employees under the input manager.
+     * @param employeeName
+     * @return The number of direct and indirect employees.
+     */
     private int countEmployeesUnder(String employeeName) {
-       
-        
-        for (int index = 0; index < employees.size(); index++) {
-            counter++;
-            if (employees.get(index).getManager().equals(employeeName))
-                count = 1 + countEmployeesUnder(employees.get(index).getName());  
+               
+        for (Employee employee : employees) {
+            if (employee.getManager().equals(employeeName))
+                count = 1 + countEmployeesUnder(employee.getName());
         }
-        return count;
-    }
-    
-    /**
-     * sortByEmployeeName Method will accept a List of Employee objects and 
-     * return the list sorted alphabetically by employee name utilizing the
-     * NameComparator Class as defined below.
-     * @param inputEmployee
-     * @return 
-     */
-    private List<Employee> sortByEmployeeName(List<Employee> inputEmployee) {
-        Collections.sort(inputEmployee, new NameComparator());
-        return inputEmployee;
-    }
-    
-    /**
-     * sortByManagerName Method will accept a List of Employee objects and 
-     * return the list sorted alphabetically by employees manager utilizing
-     * the ManagerComparator Class as defined below.
-     * @param inputEmployee
-     * @return 
-     */
-    private List<Employee> sortByManagerName(List<Employee> inputEmployee) {
-        Collections.sort(inputEmployee, new ManagerComparator());
-        return inputEmployee;
-    }
-
-    /**
-     * Name Comparator class implements the Comparator class for Employee
-     * objects and contains an override method to compare objects.
-     */
-    private class NameComparator implements Comparator<Employee> {
-
-        @Override
-        public int compare(Employee e1, Employee e2) {
-            String name1 = e1.getName();
-            String name2 = e2.getName();
-            return name1.compareTo(name2);
-        }
-    }
-
-    /**
-     * Name Comparator class implements the Comparator class for Employee
-     * objects and contains an override method to compare objects.
-     */
-    private class ManagerComparator implements Comparator<Employee> {
-
-        @Override
-        public int compare(Employee e1, Employee e2) {
-            String name1 = e1.getManager();
-            String name2 = e2.getManager();
-            return name1.compareTo(name2);
-        }
+        return count; // Returns the preset 0 if no reports are found.
     }
 }
